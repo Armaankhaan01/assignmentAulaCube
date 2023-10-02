@@ -7,6 +7,7 @@ import Comment from "./Comment"
 const HomePage = () => {
   const [comments, setComments] = useState([])
   const [selectedPost, setSelectedPost] = useState(1) // Default post selection
+  const [postData, setPostData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [apiError, setApiError] = useState(false)
   // Fetch comments from the API
@@ -16,7 +17,18 @@ const HomePage = () => {
       .then((data) => {
         setComments(data)
         setIsLoading(false)
-      }) // Limit to 100 comments
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error)
+        setIsLoading(false)
+        setApiError(true)
+      })
+    fetch("https://jsonplaceholder.typicode.com/posts")
+      .then((response) => response.json())
+      .then((data) => {
+        setPostData(data)
+        setIsLoading(false)
+      })
       .catch((error) => {
         console.error("Error fetching data:", error)
         setIsLoading(false)
@@ -28,6 +40,9 @@ const HomePage = () => {
   const filteredComments = comments.filter(
     (comment) => comment.postId === selectedPost
   )
+  const filteredPosts = postData.filter((post) => post.id === selectedPost);
+
+// console.log("filteredPosts", filteredPosts);
   if (isLoading) {
     return (
       <View
@@ -81,12 +96,14 @@ const HomePage = () => {
       </Picker>
       <ScrollView>
         {/* Display the first comment as the post */}
-        {filteredComments.length > 0 && (
-          <Comment comment={filteredComments[0]} key={filteredComments[0].id} />
+        {filteredPosts.length > 0 && (
+          <View>
+          <Comment label={"Post"} comment={filteredPosts[0]} key={filteredPosts[0].id} />
+          </View>
         )}
         {/* Display other comments */}
         {filteredComments.map((comment) => (
-          <Comment comment={comment} key={comment.id} />
+          <Comment label={"comments"} comment={comment} key={comment.id} />
         ))}
       </ScrollView>
     </View>
