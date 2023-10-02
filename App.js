@@ -1,16 +1,14 @@
 import React from "react"
-import { SafeAreaView, StyleSheet, StatusBar } from "react-native"
-import { PaperProvider } from "react-native-paper"
+import { StyleSheet, StatusBar } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
 import HomePage from "./src/features/HomePage"
 
 export default function App() {
   return (
-    <PaperProvider>
-      <StatusBar barStyle="light-content" backgroundColor="white" />
-      <SafeAreaView style={styles.container}>
-        <HomePage />
-      </SafeAreaView>
-    </PaperProvider>
+    <SafeAreaView style={styles.container}>
+      <StatusBar backgroundColor={"white"} barStyle={"dark-content"} />
+      <HomePage />
+    </SafeAreaView>
   )
 }
 
